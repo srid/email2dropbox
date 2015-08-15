@@ -17,7 +17,8 @@ file stored in Dropbox.
 ** TODO MVP 
 - [-] Create a Heroku app with a suitable /mail addon/.
   - [X] Write app.json
-  - [ ] Write Hello world server and display env details
+  - [X] Write Hello world server 
+  - [ ] Verify the mail addon
 - [ ] Use Dropbox app folder API
   - [ ] Pick an API and language
 - [ ] Test by writing to hello.txt
