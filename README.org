@@ -15,6 +15,9 @@ file stored in Dropbox.
 - Possibly, tools write back to trigger remote actions (http request, email response, etc.)
 
 ** TODO MVP 
-- [ ] Create a Heroku app with a suitable /mail addon/.
+- [-] Create a Heroku app with a suitable /mail addon/.
+  - [X] Write app.json
+  - [ ] Write Hello world server and display env details
 - [ ] Use Dropbox app folder API
+  - [ ] Pick an API and language
 - [ ] Test by writing to hello.txt
