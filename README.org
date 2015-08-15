@@ -15,11 +15,15 @@ file stored in Dropbox.
 - Possibly, tools write back to trigger remote actions (http request, email response, etc.)
 
 ** TODO MVP 
+SCHEDULED: <2015-08-15 Sat>
 - [-] Create a Heroku app with a suitable /mail addon/.
   - [X] Write app.json
   - [X] Write Hello world server 
-  - [ ] Verify the mail addon
-    - [ ] Resolve sender signature troubles (!)
+  - [-] Verify the mail addon
+    - [X] Resolve sender signature troubles (!)
+    - [ ] Verify webhook works
+      - [ ] Fix Flask.g not working
+        - [ ] Switch to Pyramid!
 - [ ] Use Dropbox app folder API
   - [ ] Pick an API and language
 - [ ] Test by writing to hello.txt
