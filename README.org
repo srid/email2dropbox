@@ -19,6 +19,7 @@ file stored in Dropbox.
   - [X] Write app.json
   - [X] Write Hello world server 
   - [ ] Verify the mail addon
+    - [ ] Resolve sender signature troubles (!)
 - [ ] Use Dropbox app folder API
   - [ ] Pick an API and language
 - [ ] Test by writing to hello.txt
