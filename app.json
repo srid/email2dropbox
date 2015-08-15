@@ -4,5 +4,13 @@
     "addons": [
         "postmark",
         "papertrail"
-    ]
+    ],
+    "env": {
+        "DROPBOX_APP_KEY": {
+            "description": "Dropbox app key"
+        },
+        "DROPBOX_APP_SECRET": {
+            "description": "Dropbox app secret"
+        }
+    }
 }
