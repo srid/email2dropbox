@@ -1,7 +1,12 @@
 #+TITLE: Funnel
 
 Funnel is an experiment in leveraging plain ol' filesystem for processing
-network requests, such as email and webhooks, via Dropbox.
+network requests, such as email and webhooks, via Dropbox. The *philosophy
+behind funnel* is to facilitate the use of simple UNIX tools for processing data
+that spans the network. As an *example*, the command =cat ${FILE} >>
+org/Inbox.org= is all that is needed to process an incoming email (stored in
+Dropbox) from the user requesting an addition of GTD inbox item to their org
+file stored in Dropbox.
 
 ** Brainstorming
 
@@ -9,7 +14,7 @@ network requests, such as email and webhooks, via Dropbox.
 - Unix tools pipeped, processing on new content in Dropbox
 - Possibly, tools write back to trigger remote actions (http request, email response, etc.)
 
-** MVP 
+** TODO MVP 
 - [ ] Create a Heroku app with a suitable /mail addon/.
 - [ ] Use Dropbox app folder API
 - [ ] Test by writing to hello.txt
