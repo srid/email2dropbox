@@ -21,9 +21,10 @@ SCHEDULED: <2015-08-15 Sat>
   - [X] Write Hello world server 
   - [-] Verify the mail addon
     - [X] Resolve sender signature troubles (!)
-    - [ ] Verify webhook works
-      - [ ] Fix Flask.g not working
-        - [ ] Switch to Pyramid!
+    - [-] Verify webhook works
+      - [X] Fix Flask.g not working
+        - [X] Switch to Pyramid!
+      - [ ] Log webhook data
 - [ ] Use Dropbox app folder API
   - [ ] Pick an API and language
 - [ ] Test by writing to hello.txt
