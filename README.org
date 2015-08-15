@@ -3,8 +3,13 @@
 Funnel is an experiment in leveraging plain ol' filesystem for processing
 network requests, such as email and webhooks, via Dropbox.
 
-* Brainstorming
+** Brainstorming
 
 - Email to append-to-Dropbox
 - Unix tools pipeped, processing on new content in Dropbox
 - Possibly, tools write back to trigger remote actions (http request, email response, etc.)
+
+** MVP 
+- [ ] Create a Heroku app with a suitable /mail addon/.
+- [ ] Use Dropbox app folder API
+- [ ] Test by writing to hello.txt
