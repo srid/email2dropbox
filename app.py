@@ -10,9 +10,11 @@ app.debug = True
 
 @app.route('/')
 def hello():
-    inmem = getattr(g, 'inmem', 'Nothing so far')
+    inmem = g.get('inmem', 'Nothing so far')
     return inmem, 200, {'Content-Type': 'text/plain'}
 
 @app.route('/incoming', methods=['POST'])
 def incoming():
     inbound = PostmarkInbound(json=request.get_data())
+    g.inmem = "Received subject: %s" % inbound.subject()
+    return "Ok"
