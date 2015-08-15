@@ -16,15 +16,18 @@ def index(request):
 
 @view_config(name='incoming', request_method='POST')
 def incoming(request):
-    #inbound = PostmarkInbound(json=request.body)
-    #log.error("Received email: %s", inbound.subject())
-    log.error("Received %s", request.body)
+    inbound = PostmarkInbound(json=request.body)
+    log.error("Received email: %s", inbound.subject())
     return Response("Ok")
 
 if __name__ == '__main__':
     config = Configurator()
     config.scan()
     app = config.make_wsgi_app()
+
+    h = logging.StreamHandler()
+    h.setLevel(logging.DEBUG)
+    log.addHandler(h)
 
     port = int(os.environ.get("PORT", 8080))
     server = make_server('0.0.0.0', port, app)
