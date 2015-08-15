@@ -1,13 +1,16 @@
 import os
 from flask import Flask
 from flask import request
+from flask import g
+from postmark_inbound import PostmarkInbound
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return '\n'.join(map(str, os.environ.items()))
+    inmem = getattr(g, 'inmem', 'Nothing so far')
+    return inmem, 200, {'Content-Type': 'text/plain'}
 
 @app.route('/incoming', methods=['POST'])
 def incoming():
-    return request.get_data()
+    inbound = PostmarkInbound(json=request.get_data())
