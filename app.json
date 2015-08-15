@@ -2,6 +2,7 @@
     "name": "Funnel",
     "repository": "https://github.com/srid/funnel",
     "addons": [
-        "postmark"
+        "postmark",
+        "papertrail"
     ]
 }
