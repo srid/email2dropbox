@@ -10,6 +10,7 @@ from pyramid.response import Response
 from pyramid.view import view_config
 import pyramid.httpexceptions as exc
 from pyramid.session import SignedCookieSessionFactory
+import wsgiauth.basic
 
 import dropbox.rest
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
@@ -68,6 +69,11 @@ def configure_webapp():
     config.set_session_factory(session_factory)
 
     app = config.make_wsgi_app()
+
+    # Basic auth
+    password = getenv("PASSWORD")
+    auth_middleware = wsgiauth.basic.basic("Private", lambda _, user, passwd: paswd == password)
+    app = auth_middleware(app)
 
     # FIXME: only seeing error and above.
     h = logging.StreamHandler()
