@@ -54,12 +54,14 @@ Implementation
 
 
 ** HOWTO
-- Create a Postmark account
-  - Point its inbound URL to https://<thisapp>.herokuapp.com/incoming
-- Create Dropbox app keys
-  - Set its app key and secret in heroku config
+- Deploy using app.json (automatically creates postmark and papertrail accounts)
+  - Go to Dropbox, and create an app. Set app key and secret here.
+- Take a note of $PASSWORD from heroku config
+  - =export APPURL=https://user:${PASSWORD}@${APPNAME}.herokuapp.com=
+- Set Dropbox's oauth redirect url to =${APPURL}/dropboxauth=
 - Visit https://<thisapp>.herokuapp.com/ to complete oauth flow
   - Run the specified TOKEN cli
+- =heroku addon:open postmark= and point the inbound URL to =${APPURL}/incoming=
 - Send a test email to your postmark inbound address
 
 *** Processing JSON files
