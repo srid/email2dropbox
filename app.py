@@ -14,6 +14,18 @@ from dropbox.client import DropboxOAuth2Flow, DropboxClient
 from postmark_inbound import PostmarkInbound
 
 
+# Inbound email handling
+# ----------------------
+
+def handle_email(message):
+    # `message` is of format: https://github.com/jpadilla/postmark-inbound-python#usage
+    log.error("Received email from %s", message.sender())
+    log.info("Message JSON: %s", message.json)
+
+
+# HTTP view handling
+# ------------------
+
 @view_config(name='', request_method='GET')
 def index(request):
     flow = make_dropbox_auth_flow(request.session)
@@ -31,10 +43,13 @@ def dropboxauth(request):
 
 @view_config(name='incoming', request_method='POST')
 def incoming(request):
-    inbound = PostmarkInbound(json=request.body)
-    log.error("Received email: %s", inbound.subject())
+    message = PostmarkInbound(json=request.body)
+    handle_email(message)
     return Response("Ok")
 
+
+# HTTP configuration
+# ------------------
 
 def configure_webapp():
     session_secret = os.getenv("SESSION_SECRET")
@@ -55,13 +70,16 @@ def configure_webapp():
     port = int(os.environ.get("PORT", 8080))
     return make_server('0.0.0.0', port, app)
 
+
+# Dropbox configuration, utility
+# ------------------------------
+
 def configure_dropbox():
     app_key = os.getenv("DROPBOX_APP_KEY")
     app_secret = os.getenv("DROPBOX_APP_SECRET")
     if app_key is None or app_secret is None:
         raise ValueError("DROPBOX env vars not set")
     return app_key, app_secret
-
 
 REDIRECT_URI = "https://funnelsrid.herokuapp.com/dropboxauth"  # XXX
 def make_dropbox_auth_flow(session):
@@ -89,6 +107,9 @@ def handle_dropbox_redirect():
         log.error("Auth error: %s" % (e,))
         raise exc.HTTPForbidden()
 
+
+# main
+# ----
 
 if __name__ == '__main__':
     configure_dropbox()
