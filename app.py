@@ -28,16 +28,16 @@ def handle_email(message):
 # HTTP view handling
 # ------------------
 
-@view_config(name='', request_method='GET')
+@view_config(request_method='GET')
 def index(request):
-    flow = make_dropbox_auth_flow(request.session)
+    flow = make_dropbox_auth_flow(request.session, request.application_url + '/dropboxauth')
     authorize_url = flow.start()
     return exc.HTTPFound(location=authorize_url)
 
 @view_config(name='dropboxauth', request_method='GET')
 def dropboxauth(request):
     with handle_dropbox_redirect():
-        flow = make_dropbox_auth_flow(request.session)
+        flow = make_dropbox_auth_flow(request.session, request.application_url + '/dropboxauth')
         access_token, user_id, url_state = flow.finish(request.GET)
         log.info("Success response from Dropbox.")
         # Not storing in DB, until this app is to be used multiple user.
@@ -83,10 +83,9 @@ def configure_dropbox():
         raise ValueError("DROPBOX env vars not set")
     return app_key, app_secret
 
-REDIRECT_URI = "https://funnelsrid.herokuapp.com/dropboxauth"  # XXX
-def make_dropbox_auth_flow(session):
+def make_dropbox_auth_flow(session, redirect_url):
     app_key, app_secret = configure_dropbox()
-    flow = DropboxOAuth2Flow(app_key, app_secret, REDIRECT_URI,
+    flow = DropboxOAuth2Flow(app_key, app_secret, redirect_url,
                              session, "dropbox-auth-csrf-token")
     return flow
 
