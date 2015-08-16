@@ -36,10 +36,11 @@ CLOSED: [2015-08-15 Sat 17:57] SCHEDULED: <2015-08-15 Sat>
 ** TODO Stage II work
 
 Implementation
+- [X] Write inbound message as JSON to timestamped files
+- [X] Write CLI to append to Inbox.org
 - [ ] Configure basic auth
   - [ ] Ensure it works with postmark
   - [ ] Ensure it works with dropbox oauth
-- [X] Write inbound message as JSON to timestamped files
 
 ** TODO Go public [0/8]
 - [ ] Rename project, if necessary.
@@ -60,3 +61,39 @@ Implementation
 - Visit https://<thisapp>.herokuapp.com/ to complete oauth flow
   - Run the specified TOKEN cli
 - Send a test email to your postmark inbound address
+
+*** Processing JSON files
+
+Funnel creates timestamped JSON file for each incoming email. Here is a poller
+that appends to Inbox.org for each incoming message:
+
+#+BEGIN_SRC bash
+  while true; do find . -name "*.json" -print0 | xargs -r -n 1 ~/Dropbox/org/toinbox.sh; sleep 2; done
+#+END_SRC
+
+The =toinbox.sh= script may look like:
+
+#+BEGIN_SRC bash
+  #!/bin/bash
+  set -e
+
+  json=$1
+
+  title() {
+      jq -r .Subject $json
+  }
+
+  body() {
+      # The `sed` removes \r
+      jq -r .TextBody $json | sed ':a;N;$!ba;s/\r//g'
+  }
+
+  inboxfile=~/Dropbox/org/Inbox.org
+
+  echo "** TODO `title`" >> $inboxfile
+  body >> $inboxfile
+  # echo >> $inboxfile  # ensure newline
+
+  rm $json
+
+#+END_SRC
