@@ -18,13 +18,13 @@ App folder.
   - Pass on the Dropbox key/secret in the config variables section
 - Take note of $PASSWORD from heroku config vars
   - =export APPURL=https://user:${PASSWORD}@${APPNAME}.herokuapp.com=
-- In your Dropbox App settings, OAuth 2 redirect url to =${APPURL}/dropboxauth=
-- Visit https://<thisapp>.herokuapp.com/ to complete oauth flow
+- In your Dropbox App settings, set OAuth 2 redirect url to =APPURL/dropboxauth=
+- Visit =APPURL= to complete oauth flow
   - Run the specified heroku cli to set the =TOKEN= config var (or do it in the dashboard)
   - If Dropbox displays the token directly, set that value to =TOKEN= config var.
 - =heroku addon:open postmark= (or click the addon from the dashboard)
-  - in Postmark inbound settings, point the inbound URL to =${APPURL}/incoming=
-  - click 'Check'; if it fails, manually generated your Dropbox token
+  - in Postmark inbound settings, point the inbound URL to =APPURL/incoming=
+  - click 'Check'; if it fails, manually generate your Dropbox token
 - Send a test email to your postmark inbound address
 
 ** Processing JSON files
@@ -105,6 +105,7 @@ CLOSED: [2015-08-16 Sun 14:18]
 - [ ] Test thoroughly (deploy new apps)
 - [ ] Blog post
 - [ ] Archive tasks and update README.org
+  - [ ] Mention the philosophy beyind (SoC; sending emails vs processing them in UNIX cli)
 - [ ] Announce (HN, reddit, mailing lists)
 
 
