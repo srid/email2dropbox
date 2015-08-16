@@ -26,9 +26,8 @@ def dropboxauth(request):
         flow = make_dropbox_auth_flow(request.session)
         access_token, user_id, url_state = flow.finish(request.GET)
         log.info("Success response from Dropbox.")
-        log.error("Got token %s, user %s, and state %s",
-                  access_token, user_id, url_state)
-    return exc.HTTPFound(location="/home")
+        # Not storing in DB, until this app is to be used multiple user.
+        return Response("heroku config:set TOKEN=%s" % access_token)
 
 @view_config(name='incoming', request_method='POST')
 def incoming(request):
