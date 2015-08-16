@@ -8,6 +8,7 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 from pyramid.view import view_config
 import pyramid.httpexceptions as exc
+from pyramid.session import SignedCookieSessionFactory
 
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
 from postmark_inbound import PostmarkInbound
@@ -34,9 +35,15 @@ def incoming(request):
 
 
 def configure_webapp():
+    session_secret = os.getenv("SESSION_SECRET")
+    if session_secret is None:
+        raise ValueError("session secret not set")
 
     config = Configurator()
     config.scan()
+    session_factory = SignedCookieSessionFactory(session_secret)
+    config.set_session_factory(session_factory)
+
     app = config.make_wsgi_app()
 
     h = logging.StreamHandler()
@@ -81,4 +88,5 @@ def handle_dropbox_redirect():
 if __name__ == '__main__':
     configure_dropbox()
     server = configure_webapp()
+    log.error("Running Pyramid at http://0.0.0.0:$PORT")
     server.serve_forever()

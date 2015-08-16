@@ -6,6 +6,9 @@
         "papertrail"
     ],
     "env": {
+        "SESSION_SECRET": {
+            "generator": "secret"
+        },
         "DROPBOX_APP_KEY": {
             "description": "Dropbox app key"
         },
