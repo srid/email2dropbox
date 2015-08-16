@@ -29,24 +29,24 @@ App folder.
 
 ** Processing JSON files
 
-Here is a poller that appends to Inbox.org for each incoming message:
+I use Dropbox on a server VM. Here is a script that monitors the incoming emails
+(JSON) and appends to Inbox.org (org-mode):
 
 #+BEGIN_SRC bash
+  cd ~/Dropbox/Apps/IncomingEmails
   while true; do find . -name "*.json" -print0 | xargs -r -n 1 ~/Dropbox/org/toinbox.sh; sleep 2; done
 #+END_SRC
 
-The =toinbox.sh= script may look like:
+The =toinbox.sh= script looks like:
 
 #+BEGIN_SRC bash
   #!/bin/bash
   set -e
 
   json=$1
-
   title() {
       jq -r .Subject $json
   }
-
   body() {
       # The `sed` removes \r
       jq -r .TextBody $json | sed ':a;N;$!ba;s/\r//g'
@@ -56,19 +56,11 @@ The =toinbox.sh= script may look like:
 
   echo "** TODO `title`" >> $inboxfile
   body >> $inboxfile
-  # echo >> $inboxfile  # ensure newline
 
   rm $json
-
 #+END_SRC
 
 * Tasks
-** Current design
-
-- Email to Dropbox
-- Unix tools pipeped, processing on new content in Dropbox
-- Possibly, tools write back to trigger remote actions (http request, email response, etc.)
-
 ** DONE MVP 
 CLOSED: [2015-08-15 Sat 17:57] SCHEDULED: <2015-08-15 Sat>
 - [X] Create a Heroku app with a suitable /mail addon/.
@@ -98,16 +90,20 @@ Implementation
   - [X] Ensure it works with postmark
   - [X] Ensure it works with dropbox oauth
 
-** TODO Silently go public [1/4]
+** TODO Silently go public [3/4]
 - [X] Rename project, if necessary.
-- [ ] Add Heroku button
-- [ ] Revamp README (and archive tasks)
+- [X] Add Heroku button
+- [X] Revamp README
 - [ ] Make repo public
 
-** TODO Announce [0/4]
+** TODO Announce [0/5]
 - [ ] Improve UI & UX
-- [ ] Test thoroughly (as new apps)
+  - [ ] Simplify the whole deployment/setup process
+    - Automatic setting of wehbook URL in postmark
+    - Automatic showing of Dropbox instructions in index page.
+- [ ] Test thoroughly (deploy new apps)
 - [ ] Blog post
-- [ ] Announce (HN, reddit, mailing lists
+- [ ] Archive tasks and update README.org
+- [ ] Announce (HN, reddit, mailing lists)
 
 
