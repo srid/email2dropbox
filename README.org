@@ -8,14 +8,14 @@ org/Inbox.org= is all that is needed to process an incoming email (stored in
 Dropbox) from the user requesting an addition of GTD inbox item to their org
 file stored in Dropbox.
 
-** Brainstorming
+** Current design
 
-- Email to append-to-Dropbox
+- Email to Dropbox
 - Unix tools pipeped, processing on new content in Dropbox
 - Possibly, tools write back to trigger remote actions (http request, email response, etc.)
 
-** TODO MVP 
-SCHEDULED: <2015-08-15 Sat>
+** DONE MVP 
+CLOSED: [2015-08-15 Sat 17:57] SCHEDULED: <2015-08-15 Sat>
 - [X] Create a Heroku app with a suitable /mail addon/.
   - [X] Write app.json
   - [X] Write Hello world server 
@@ -32,13 +32,25 @@ SCHEDULED: <2015-08-15 Sat>
 - [X] Test by writing to hello.txt
   - [X] Persist oauth token in env var
   - [X] Write file!
-- [ ] Append to the file instead
+- [X] Append to the file instead
 ** TODO Stage II work
-How to model incoming data? Some options:
-- Append to a log file
-- Create seperate file (possibly as JSON)
+Planning:
+- [X] have the app create one file per entry.
+  - =./<timestamp>.json=
+- [X] then we can do =ls -1 | sort | head -1= to pick the earliest item; process and delete it.
+- [ ] How to configure 'templates'?
+  - eg: distinguish org-Inbox-append from other message types?
+  - and how to configure this when sending emails?? 
+    where the user generally types only subject and body.
+  - [ ] Perhaps leave this to the CLI? We don't provide templates; the CLI can
+    do whatever it wants, including smartly parsing for different kinds of
+    message.
 
-For the later, how to write UNIX command line to process files in order?
+Implementation
+- [ ] Configure basic auth
+  - [ ] Ensure it works with postmark
+  - [ ] Ensure it works with dropbox oauth
+- [ ] ???
 
 
 ** HOWTO
