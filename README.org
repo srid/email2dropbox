@@ -29,6 +29,7 @@ SCHEDULED: <2015-08-15 Sat>
   - [X] Pick an API and language
   - [X] Get oauth flow working
     - [X] Configure pyramid session
-- [ ] Test by writing to hello.txt
-  - [ ] Persist oauth token in env var
-  - [ ] Write file!
+- [X] Test by writing to hello.txt
+  - [X] Persist oauth token in env var
+  - [X] Write file!
+- [ ] Append to the file instead

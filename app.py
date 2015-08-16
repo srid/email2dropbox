@@ -20,7 +20,8 @@ from postmark_inbound import PostmarkInbound
 def handle_email(message):
     # `message` is of format: https://github.com/jpadilla/postmark-inbound-python#usage
     log.error("Received email from %s", message.sender())
-    log.info("Message JSON: %s", message.json)
+    log.error("Message JSON: %s", message.json)
+    dropbox_write("/hello.txt", message.text_body())
 
 
 # HTTP view handling
@@ -63,6 +64,7 @@ def configure_webapp():
 
     app = config.make_wsgi_app()
 
+    # FIXME: only seeing error and above.
     h = logging.StreamHandler()
     h.setLevel(logging.DEBUG)
     log.addHandler(h)
@@ -106,6 +108,17 @@ def handle_dropbox_redirect():
     except DropboxOAuth2Flow.ProviderException, e:
         log.error("Auth error: %s" % (e,))
         raise exc.HTTPForbidden()
+
+def get_dropbox_token():
+    token = os.getenv("TOKEN")
+    if token is None:
+        raise ValueError("TOKEN not set (user did not initiate oauth?)")
+    return token
+
+def dropbox_write(path, content):
+    client = DropboxClient(get_dropbox_token())
+    info = client.put_file(path, content)
+    log.error("Created file %s with metadata %s", path, info)
 
 
 # main
