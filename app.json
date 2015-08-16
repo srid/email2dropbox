@@ -1,6 +1,6 @@
 {
-    "name": "Funnel",
-    "repository": "https://github.com/srid/funnel",
+    "name": "email2dropbox",
+    "repository": "https://github.com/srid/email2dropbox",
     "addons": [
         "postmark",
         "papertrail"

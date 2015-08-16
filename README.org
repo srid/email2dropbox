@@ -1,13 +1,56 @@
-#+TITLE: Funnel
+#+TITLE: email2dropbox
 
-Funnel is an experiment in leveraging plain ol' filesystem for processing
-network requests, such as email and webhooks, via Dropbox. The *philosophy
-behind funnel* is to facilitate the use of simple UNIX tools for processing data
-that spans the network. As an *example*, the command =cat ${FILE} >>
-org/Inbox.org= is all that is needed to process an incoming email (stored in
-Dropbox) from the user requesting an addition of GTD inbox item to their org
-file stored in Dropbox.
+Deploy this app to Heroku and get a free inbound email address to which you may
+send emails which are then stored as timestamped JSON files in your Dropbox's
+App folder.
 
+* Getting started
+- Deploy using app.json (automatically creates postmark and papertrail accounts)
+  - Go to Dropbox, and create an app. Set app key and secret here.
+- Take a note of $PASSWORD from heroku config
+  - =export APPURL=https://user:${PASSWORD}@${APPNAME}.herokuapp.com=
+- Set Dropbox's oauth redirect url to =${APPURL}/dropboxauth=
+- Visit https://<thisapp>.herokuapp.com/ to complete oauth flow
+  - Run the specified TOKEN cli
+- =heroku addon:open postmark= and point the inbound URL to =${APPURL}/incoming=
+- Send a test email to your postmark inbound address
+
+** Processing JSON files
+
+Here is a poller that appends to Inbox.org for each incoming message:
+
+#+BEGIN_SRC bash
+  while true; do find . -name "*.json" -print0 | xargs -r -n 1 ~/Dropbox/org/toinbox.sh; sleep 2; done
+#+END_SRC
+
+The =toinbox.sh= script may look like:
+
+#+BEGIN_SRC bash
+  #!/bin/bash
+  set -e
+
+  json=$1
+
+  title() {
+      jq -r .Subject $json
+  }
+
+  body() {
+      # The `sed` removes \r
+      jq -r .TextBody $json | sed ':a;N;$!ba;s/\r//g'
+  }
+
+  inboxfile=~/Dropbox/org/Inbox.org
+
+  echo "** TODO `title`" >> $inboxfile
+  body >> $inboxfile
+  # echo >> $inboxfile  # ensure newline
+
+  rm $json
+
+#+END_SRC
+
+* Tasks
 ** Current design
 
 - Email to Dropbox
@@ -43,8 +86,8 @@ Implementation
   - [X] Ensure it works with postmark
   - [X] Ensure it works with dropbox oauth
 
-** TODO Silently go public [0/4]
-- [ ] Rename project, if necessary.
+** TODO Silently go public [1/4]
+- [X] Rename project, if necessary.
 - [ ] Add Heroku button
 - [ ] Revamp README (and archive tasks)
 - [ ] Make repo public
@@ -56,49 +99,3 @@ Implementation
 - [ ] Announce (HN, reddit, mailing lists
 
 
-** HOWTO
-- Deploy using app.json (automatically creates postmark and papertrail accounts)
-  - Go to Dropbox, and create an app. Set app key and secret here.
-- Take a note of $PASSWORD from heroku config
-  - =export APPURL=https://user:${PASSWORD}@${APPNAME}.herokuapp.com=
-- Set Dropbox's oauth redirect url to =${APPURL}/dropboxauth=
-- Visit https://<thisapp>.herokuapp.com/ to complete oauth flow
-  - Run the specified TOKEN cli
-- =heroku addon:open postmark= and point the inbound URL to =${APPURL}/incoming=
-- Send a test email to your postmark inbound address
-
-*** Processing JSON files
-
-Funnel creates timestamped JSON file for each incoming email. Here is a poller
-that appends to Inbox.org for each incoming message:
-
-#+BEGIN_SRC bash
-  while true; do find . -name "*.json" -print0 | xargs -r -n 1 ~/Dropbox/org/toinbox.sh; sleep 2; done
-#+END_SRC
-
-The =toinbox.sh= script may look like:
-
-#+BEGIN_SRC bash
-  #!/bin/bash
-  set -e
-
-  json=$1
-
-  title() {
-      jq -r .Subject $json
-  }
-
-  body() {
-      # The `sed` removes \r
-      jq -r .TextBody $json | sed ':a;N;$!ba;s/\r//g'
-  }
-
-  inboxfile=~/Dropbox/org/Inbox.org
-
-  echo "** TODO `title`" >> $inboxfile
-  body >> $inboxfile
-  # echo >> $inboxfile  # ensure newline
-
-  rm $json
-
-#+END_SRC
