@@ -25,6 +25,8 @@ SCHEDULED: <2015-08-15 Sat>
       - [X] Fix Flask.g not working
         - [X] Switch to Pyramid!
       - [X] Log webhook data
-- [ ] Use Dropbox app folder API
-  - [ ] Pick an API and language
+- [-] Use Dropbox app folder API
+  - [X] Pick an API and language
+  - [ ] Get oauth flow working
+    - [ ] Configure pyramid session
 - [ ] Test by writing to hello.txt

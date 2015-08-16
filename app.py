@@ -20,12 +20,15 @@ def index(request):
     authorize_url = flow.start()
     return exc.HTTPFound(location=authorize_url)
 
-@view_config(name='dropboxauth', request_method='POST')
+@view_config(name='dropboxauth', request_method='GET')
 def dropboxauth(request):
     with handle_dropbox_redirect():
         flow = make_dropbox_auth_flow(request.session)
         access_token, user_id, url_state = flow.finish(request.GET)
-    return HTTPFound(location="/home")
+        log.info("Success response from Dropbox.")
+        log.error("Got token %s, user %s, and state %s",
+                  access_token, user_id, url_state)
+    return exc.HTTPFound(location="/home")
 
 @view_config(name='incoming', request_method='POST')
 def incoming(request):
@@ -60,10 +63,12 @@ def configure_dropbox():
         raise ValueError("DROPBOX env vars not set")
     return app_key, app_secret
 
+
+REDIRECT_URI = "https://funnelsrid.herokuapp.com/dropboxauth"  # XXX
 def make_dropbox_auth_flow(session):
     app_key, app_secret = configure_dropbox()
-    flow = DropboxOAuth2Flow(app_key, app_secret,
-                             request.session, "dropbox-auth-csrf-token")
+    flow = DropboxOAuth2Flow(app_key, app_secret, REDIRECT_URI,
+                             session, "dropbox-auth-csrf-token")
     return flow
 
 @contextmanager
@@ -84,6 +89,7 @@ def handle_dropbox_redirect():
     except DropboxOAuth2Flow.ProviderException, e:
         log.error("Auth error: %s" % (e,))
         raise exc.HTTPForbidden()
+
 
 if __name__ == '__main__':
     configure_dropbox()
