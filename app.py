@@ -30,18 +30,23 @@ def handle_email(message):
 
 @view_config(request_method='GET')
 def index(request):
-    flow = make_dropbox_auth_flow(request.session, request.application_url + '/dropboxauth')
+    flow = make_dropbox_auth_flow(request.session, dropboxauth_url(request))
     authorize_url = flow.start()
     return exc.HTTPFound(location=authorize_url)
 
 @view_config(name='dropboxauth', request_method='GET')
 def dropboxauth(request):
     with handle_dropbox_redirect():
-        flow = make_dropbox_auth_flow(request.session, request.application_url + '/dropboxauth')
+        flow = make_dropbox_auth_flow(request.session, dropboxauth_url(request))
         access_token, user_id, url_state = flow.finish(request.GET)
         log.info("Success response from Dropbox.")
         # Not storing in DB, until this app is to be used multiple user.
         return Response("heroku config:set TOKEN=%s" % access_token)
+def dropboxauth_url(request):
+    url = request.application_url + '/dropboxauth'
+    # Dropbox needs https.
+    if 'https' not in url:
+        url = url.replace('http', 'https')
 
 @view_config(name='incoming', request_method='POST')
 def incoming(request):
