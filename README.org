@@ -52,6 +52,14 @@ Implementation
   - [ ] Ensure it works with dropbox oauth
 - [ ] ???
 
+** TODO Go public [0/4]
+- [ ] Rename project, if necessary.
+- [ ] Add Heroku button
+- [ ] Enable Dropbox oauth for everyone
+- [ ] UI & UX
+- [ ] Make reop public
+- [ ] Blog post
+
 
 ** HOWTO
 - Create a Postmark account
