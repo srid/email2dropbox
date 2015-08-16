@@ -60,9 +60,7 @@ def incoming(request):
 # ------------------
 
 def configure_webapp():
-    session_secret = os.getenv("SESSION_SECRET")
-    if session_secret is None:
-        raise ValueError("session secret not set")
+    session_secret = getenv("SESSION_SECRET")
 
     config = Configurator()
     config.scan()
@@ -83,10 +81,8 @@ def configure_webapp():
 # ------------------------------
 
 def configure_dropbox():
-    app_key = os.getenv("DROPBOX_APP_KEY")
-    app_secret = os.getenv("DROPBOX_APP_SECRET")
-    if app_key is None or app_secret is None:
-        raise ValueError("DROPBOX env vars not set")
+    app_key = getenv("DROPBOX_APP_KEY")
+    app_secret = getenv("DROPBOX_APP_SECRET")
     return app_key, app_secret
 
 def make_dropbox_auth_flow(session, redirect_url):
@@ -115,16 +111,18 @@ def handle_dropbox_redirect():
         raise exc.HTTPForbidden()
 
 def get_dropbox_token():
-    token = os.getenv("TOKEN")
-    if token is None:
-        raise ValueError("TOKEN not set (user did not initiate oauth?)")
-    return token
+    return etenv("TOKEN")
 
 def dropbox_write(path, content, overwrite=False):
     client = DropboxClient(get_dropbox_token())
     info = client.put_file(path, content, overwrite=overwrite)
     log.error("Created file %s with metadata %s", path, info)
 
+def getenv(name):
+    value = os.getenv(name)
+    if value is None:
+        raise ValueError("Environment '%s' needs to be set." % name)
+    return value
 
 # main
 # ----
