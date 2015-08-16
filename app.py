@@ -70,8 +70,7 @@ def configure_webapp():
     h.setLevel(logging.DEBUG)
     log.addHandler(h)
 
-    port = int(os.environ.get("PORT", 8080))
-    return make_server('0.0.0.0', port, app)
+    return app
 
 
 # Dropbox configuration, utility
@@ -139,8 +138,11 @@ def dropbox_append(path, content):
 # main
 # ----
 
+configure_dropbox()
+app = configure_webapp()
+
 if __name__ == '__main__':
-    configure_dropbox()
-    server = configure_webapp()
+    port = int(os.environ.get("PORT", 8080))
+    server = make_server('0.0.0.0', port, app)
     log.error("Running Pyramid at http://0.0.0.0:$PORT")
     server.serve_forever()
