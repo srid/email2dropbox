@@ -33,22 +33,25 @@ CLOSED: [2015-08-15 Sat 17:57] SCHEDULED: <2015-08-15 Sat>
   - [X] Persist oauth token in env var
   - [X] Write file!
 - [X] Append to the file instead
-** TODO Stage II work
+** DONE Stage II work
+CLOSED: [2015-08-16 Sun 13:01]
 
 Implementation
 - [X] Write inbound message as JSON to timestamped files
 - [X] Write CLI to append to Inbox.org
-- [ ] Configure basic auth
-  - [ ] Ensure it works with postmark
-  - [ ] Ensure it works with dropbox oauth
+- [X] Configure basic auth
+  - [X] Ensure it works with postmark
+  - [X] Ensure it works with dropbox oauth
 
-** TODO Go public [0/8]
+** TODO Silently go public [0/4]
 - [ ] Rename project, if necessary.
 - [ ] Add Heroku button
-- [ ] Enable Dropbox oauth for everyone
-- [ ] UI & UX
+- [ ] Revamp README (and archive tasks)
 - [ ] Make repo public
-- [ ] Test!
+
+** TODO Announce [0/4]
+- [ ] Improve UI & UX
+- [ ] Test thoroughly (as new apps)
 - [ ] Blog post
 - [ ] Announce (HN, reddit, mailing lists
 
