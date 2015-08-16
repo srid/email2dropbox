@@ -33,3 +33,19 @@ SCHEDULED: <2015-08-15 Sat>
   - [X] Persist oauth token in env var
   - [X] Write file!
 - [ ] Append to the file instead
+** TODO Stage II work
+How to model incoming data? Some options:
+- Append to a log file
+- Create seperate file (possibly as JSON)
+
+For the later, how to write UNIX command line to process files in order?
+
+
+** HOWTO
+- Create a Postmark account
+  - Point its inbound URL to https://<thisapp>.herokuapp.com/incoming
+- Create Dropbox app keys
+  - Set its app key and secret in heroku config
+- Visit https://<thisapp>.herokuapp.com/ to complete oauth flow
+  - Run the specified TOKEN cli
+- Send a test email to your postmark inbound address

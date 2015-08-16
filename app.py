@@ -10,6 +10,7 @@ from pyramid.view import view_config
 import pyramid.httpexceptions as exc
 from pyramid.session import SignedCookieSessionFactory
 
+import dropbox.rest
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
 from postmark_inbound import PostmarkInbound
 
@@ -21,7 +22,7 @@ def handle_email(message):
     # `message` is of format: https://github.com/jpadilla/postmark-inbound-python#usage
     log.error("Received email from %s", message.sender())
     log.error("Message JSON: %s", message.json)
-    dropbox_write("/hello.txt", message.text_body())
+    dropbox_append("/log.txt", message.text_body())
 
 
 # HTTP view handling
@@ -115,10 +116,24 @@ def get_dropbox_token():
         raise ValueError("TOKEN not set (user did not initiate oauth?)")
     return token
 
-def dropbox_write(path, content):
+def dropbox_write(path, content, overwrite=False):
     client = DropboxClient(get_dropbox_token())
-    info = client.put_file(path, content)
+    info = client.put_file(path, content, overwrite=overwrite)
     log.error("Created file %s with metadata %s", path, info)
+
+def dropbox_append(path, content):
+    client = DropboxClient(get_dropbox_token())
+    existing_content = ''
+    try:
+        with client.get_file(path) as f:
+            existing_content = f.read()
+    except dropbox.rest.ErrorResponse as err:
+        if err.status == 404:
+            existing_content = ''
+        else:
+            raise
+    dropbox_write(path, existing_content + content, overwrite=True)
+
 
 
 # main
