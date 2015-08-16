@@ -9,5 +9,6 @@ urllib3==1.11
 venusian==1.0
 WebOb==1.4.1
 wheel==0.24.0
+wsgiauth==0.1
 zope.deprecation==4.1.2
 zope.interface==4.1.2

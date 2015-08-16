@@ -9,6 +9,11 @@
         "SESSION_SECRET": {
             "generator": "secret"
         },
+        "PASSWORD": {
+            "description": "Basic Auth password (user ignored)",
+            "generator": "secret",
+            "required": true
+        },
         "DROPBOX_APP_KEY": {
             "description": "Dropbox app key"
         },
