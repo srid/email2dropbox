@@ -72,7 +72,7 @@ def configure_webapp():
 
     # Basic auth
     password = getenv("PASSWORD")
-    auth_middleware = wsgiauth.basic.basic("Private", lambda _, user, passwd: paswd == password)
+    auth_middleware = wsgiauth.basic.basic("Private", lambda _, user, passwd: passwd == password)
     app = auth_middleware(app)
 
     # FIXME: only seeing error and above.
@@ -117,7 +117,7 @@ def handle_dropbox_redirect():
         raise exc.HTTPForbidden()
 
 def get_dropbox_token():
-    return etenv("TOKEN")
+    return getenv("TOKEN")
 
 def dropbox_write(path, content, overwrite=False):
     client = DropboxClient(get_dropbox_token())
