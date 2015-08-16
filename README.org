@@ -4,6 +4,12 @@ Deploy this app to Heroku and get a free inbound email address to which you may
 send emails which are then stored as timestamped JSON files in your Dropbox's
 App folder.
 
+#+BEGIN_HTML
+<a href="https://heroku.com/deploy">
+  <img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy">
+</a>
+#+END_HTML
+
 * Getting started
 - Deploy using app.json (automatically creates postmark and papertrail accounts)
   - Go to Dropbox, and create an app. Set app key and secret here.
