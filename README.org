@@ -90,11 +90,12 @@ Implementation
   - [X] Ensure it works with postmark
   - [X] Ensure it works with dropbox oauth
 
-** TODO Silently go public [3/4]
+** DONE Silently go public [4/4]
+CLOSED: [2015-08-16 Sun 14:18]
 - [X] Rename project, if necessary.
 - [X] Add Heroku button
 - [X] Revamp README
-- [ ] Make repo public
+- [X] Make repo public
 
 ** TODO Announce [0/5]
 - [ ] Improve UI & UX

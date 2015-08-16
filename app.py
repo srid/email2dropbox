@@ -12,7 +12,6 @@ import pyramid.httpexceptions as exc
 from pyramid.session import SignedCookieSessionFactory
 import wsgiauth.basic
 
-import dropbox.rest
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
 from postmark_inbound import PostmarkInbound
 
@@ -23,7 +22,6 @@ from postmark_inbound import PostmarkInbound
 def handle_email(message):
     # `message` is of format: https://github.com/jpadilla/postmark-inbound-python#usage
     log.error("Received email from %s", message.sender())
-    # log.error("Message JSON: %s", message.json)
     dropbox_write("/%s.json" % int(time.time()), message.json)
 
 
