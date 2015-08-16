@@ -23,7 +23,7 @@ from postmark_inbound import PostmarkInbound
 def handle_email(message):
     # `message` is of format: https://github.com/jpadilla/postmark-inbound-python#usage
     log.error("Received email from %s", message.sender())
-    log.error("Message JSON: %s", message.json)
+    # log.error("Message JSON: %s", message.json)
     dropbox_write("/%s.json" % int(time.time()), message.json)
 
 

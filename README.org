@@ -4,15 +4,27 @@ Deploy this app to Heroku and get a free inbound email address to which you may
 send emails which are then stored as timestamped JSON files in your Dropbox's
 App folder.
 
+#+BEGIN_HTML
+<a href="https://heroku.com/deploy">
+  <img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy">
+</a>
+#+END_HTML
+
 * Getting started
-- Deploy using app.json (automatically creates postmark and papertrail accounts)
-  - Go to Dropbox, and create an app. Set app key and secret here.
-- Take a note of $PASSWORD from heroku config
+- [[https://www.dropbox.com/developers/apps][Create a Dropbox API App]]
+  - Make sure to limit it to its own folder
+  - Note down the app key and secret
+- Deploy using Heroku button
+  - Pass on the Dropbox key/secret in the config variables section
+- Take note of $PASSWORD from heroku config vars
   - =export APPURL=https://user:${PASSWORD}@${APPNAME}.herokuapp.com=
-- Set Dropbox's oauth redirect url to =${APPURL}/dropboxauth=
+- In your Dropbox App settings, OAuth 2 redirect url to =${APPURL}/dropboxauth=
 - Visit https://<thisapp>.herokuapp.com/ to complete oauth flow
-  - Run the specified TOKEN cli
-- =heroku addon:open postmark= and point the inbound URL to =${APPURL}/incoming=
+  - Run the specified heroku cli to set the =TOKEN= config var (or do it in the dashboard)
+  - If Dropbox displays the token directly, set that value to =TOKEN= config var.
+- =heroku addon:open postmark= (or click the addon from the dashboard)
+  - in Postmark inbound settings, point the inbound URL to =${APPURL}/incoming=
+  - click 'Check'; if it fails, manually generated your Dropbox token
 - Send a test email to your postmark inbound address
 
 ** Processing JSON files
