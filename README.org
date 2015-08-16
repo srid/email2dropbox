@@ -34,31 +34,22 @@ CLOSED: [2015-08-15 Sat 17:57] SCHEDULED: <2015-08-15 Sat>
   - [X] Write file!
 - [X] Append to the file instead
 ** TODO Stage II work
-Planning:
-- [X] have the app create one file per entry.
-  - =./<timestamp>.json=
-- [X] then we can do =ls -1 | sort | head -1= to pick the earliest item; process and delete it.
-- [ ] How to configure 'templates'?
-  - eg: distinguish org-Inbox-append from other message types?
-  - and how to configure this when sending emails?? 
-    where the user generally types only subject and body.
-  - [ ] Perhaps leave this to the CLI? We don't provide templates; the CLI can
-    do whatever it wants, including smartly parsing for different kinds of
-    message.
 
 Implementation
 - [ ] Configure basic auth
   - [ ] Ensure it works with postmark
   - [ ] Ensure it works with dropbox oauth
-- [ ] ???
+- [X] Write inbound message as JSON to timestamped files
 
-** TODO Go public [0/4]
+** TODO Go public [0/8]
 - [ ] Rename project, if necessary.
 - [ ] Add Heroku button
 - [ ] Enable Dropbox oauth for everyone
 - [ ] UI & UX
-- [ ] Make reop public
+- [ ] Make repo public
+- [ ] Test!
 - [ ] Blog post
+- [ ] Announce (HN, reddit, mailing lists
 
 
 ** HOWTO

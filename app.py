@@ -1,4 +1,5 @@
 import os
+import time
 from contextlib import contextmanager
 import logging
 log = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ def handle_email(message):
     # `message` is of format: https://github.com/jpadilla/postmark-inbound-python#usage
     log.error("Received email from %s", message.sender())
     log.error("Message JSON: %s", message.json)
-    dropbox_append("/log.txt", message.text_body())
+    dropbox_write("/%s.json" % int(time.time()), message.json)
 
 
 # HTTP view handling
@@ -123,20 +124,6 @@ def dropbox_write(path, content, overwrite=False):
     client = DropboxClient(get_dropbox_token())
     info = client.put_file(path, content, overwrite=overwrite)
     log.error("Created file %s with metadata %s", path, info)
-
-def dropbox_append(path, content):
-    client = DropboxClient(get_dropbox_token())
-    existing_content = ''
-    try:
-        with client.get_file(path) as f:
-            existing_content = f.read()
-    except dropbox.rest.ErrorResponse as err:
-        if err.status == 404:
-            existing_content = ''
-        else:
-            raise
-    dropbox_write(path, existing_content + content, overwrite=True)
-
 
 
 # main
