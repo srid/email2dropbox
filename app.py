@@ -28,20 +28,25 @@ def handle_email(message):
 # HTTP view handling
 # ------------------
 
-@view_config(name='', request_method='GET')
+@view_config(request_method='GET')
 def index(request):
-    flow = make_dropbox_auth_flow(request.session)
+    flow = make_dropbox_auth_flow(request.session, dropboxauth_url(request))
     authorize_url = flow.start()
     return exc.HTTPFound(location=authorize_url)
 
 @view_config(name='dropboxauth', request_method='GET')
 def dropboxauth(request):
     with handle_dropbox_redirect():
-        flow = make_dropbox_auth_flow(request.session)
+        flow = make_dropbox_auth_flow(request.session, dropboxauth_url(request))
         access_token, user_id, url_state = flow.finish(request.GET)
         log.info("Success response from Dropbox.")
         # Not storing in DB, until this app is to be used multiple user.
         return Response("heroku config:set TOKEN=%s" % access_token)
+def dropboxauth_url(request):
+    url = request.application_url + '/dropboxauth'
+    # Dropbox needs https.
+    if 'https' not in url:
+        url = url.replace('http', 'https')
 
 @view_config(name='incoming', request_method='POST')
 def incoming(request):
@@ -70,8 +75,7 @@ def configure_webapp():
     h.setLevel(logging.DEBUG)
     log.addHandler(h)
 
-    port = int(os.environ.get("PORT", 8080))
-    return make_server('0.0.0.0', port, app)
+    return app
 
 
 # Dropbox configuration, utility
@@ -84,10 +88,9 @@ def configure_dropbox():
         raise ValueError("DROPBOX env vars not set")
     return app_key, app_secret
 
-REDIRECT_URI = "https://funnelsrid.herokuapp.com/dropboxauth"  # XXX
-def make_dropbox_auth_flow(session):
+def make_dropbox_auth_flow(session, redirect_url):
     app_key, app_secret = configure_dropbox()
-    flow = DropboxOAuth2Flow(app_key, app_secret, REDIRECT_URI,
+    flow = DropboxOAuth2Flow(app_key, app_secret, redirect_url,
                              session, "dropbox-auth-csrf-token")
     return flow
 
@@ -139,8 +142,11 @@ def dropbox_append(path, content):
 # main
 # ----
 
+configure_dropbox()
+app = configure_webapp()
+
 if __name__ == '__main__':
-    configure_dropbox()
-    server = configure_webapp()
+    port = int(os.environ.get("PORT", 8080))
+    server = make_server('0.0.0.0', port, app)
     log.error("Running Pyramid at http://0.0.0.0:$PORT")
     server.serve_forever()
