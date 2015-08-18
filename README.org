@@ -61,7 +61,7 @@ The =toinbox.sh= script looks like:
 #+END_SRC
 
 * Tasks
-** DONE MVP 
+** DONE MVP [4/4]
 CLOSED: [2015-08-15 Sat 17:57] SCHEDULED: <2015-08-15 Sat>
 - [X] Create a Heroku app with a suitable /mail addon/.
   - [X] Write app.json
@@ -80,7 +80,7 @@ CLOSED: [2015-08-15 Sat 17:57] SCHEDULED: <2015-08-15 Sat>
   - [X] Persist oauth token in env var
   - [X] Write file!
 - [X] Append to the file instead
-** DONE Stage II work
+** DONE Stage II work [3/3]
 CLOSED: [2015-08-16 Sun 13:01]
 
 Implementation
@@ -105,7 +105,11 @@ CLOSED: [2015-08-16 Sun 14:18]
 - [ ] Test thoroughly (deploy new apps)
 - [ ] Blog post
 - [ ] Archive tasks and update README.org
-  - [ ] Mention the philosophy beyind (SoC; sending emails vs processing them in UNIX cli)
+  - [ ] Mention the philosophy beyind
+    - SoC; sending emails vs processing them in UNIX cli
+    - Separation leads to using tools like Alfred for the 'capturing' part
+    - Even more *kinds* of data managing; like rss feeds -> .spacemacs/newsticker-url-list?
+    - Like bookmarks: http://filtercake.com/my-bookmark-service-is-bash/
 - [ ] Announce (HN, reddit, mailing lists)
 
 
